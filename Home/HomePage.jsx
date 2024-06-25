@@ -6,12 +6,15 @@ import Profiles from './HomeDrawers/Profiles';
 import Settings from './HomeDrawers/Settings';
 import About from './HomeDrawers/Abouts';
 import Logout from './HomeDrawers/Deconnexion';
-import Home from './HomeTabs/Home'; // Assume these components exist
+import Home from './HomeTabs/Home';  // Assume these components exist
 import Stages from './HomeTabs/Stages';
 import StagesPostuler from './HomeTabs/StagesPostuler';
 import Resultats from './HomeTabs/Resultats';
 
+// Create the Drawer Navigator
 const Drawer = createDrawerNavigator();
+
+// Create the Tab Navigator
 const Tab = createBottomTabNavigator();
 
 const HomeTabs = () => {
