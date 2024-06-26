@@ -2,14 +2,15 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-
+import { Provider as PaperProvider } from 'react-native-paper';
+import ApplicationForm from './ApplicationForm';
 
 const Postulation = ({ route }) => {
   const { stage } = route.params; // Extract the passed data
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Postulation Details</Text>
+      {/* <Text style={styles.title}>Candidature Details</Text>
       <Text style={styles.detail}><Text style={styles.bold}>Sociéte/Entreprise:</Text> {stage.Nom}</Text>
       <Text style={styles.detail}><Text style={styles.bold}>Domaine:</Text> {stage.Domaine}</Text>
       <Text style={styles.detail}><Text style={styles.bold}>Sujets:</Text> {stage.Libelle} : {stage.Titre}</Text>
@@ -21,7 +22,18 @@ const Postulation = ({ route }) => {
       <Text style={styles.detail}><Text style={styles.bold}>Contact:</Text> {stage.Telephone} / {stage.Fax}</Text>
       <Text style={styles.detail}><Text style={styles.bold}>Mail:</Text> {stage.Email} / {stage.Email2}</Text>
       <Text style={styles.detail}><Text style={styles.bold}>Debut:</Text> {new Date(stage.DateDebut).toLocaleDateString()} - <Text style={styles.bold}>Fin:</Text> {new Date(stage.DateFin).toLocaleDateString()}</Text>
+        
+ */}
+      <PaperProvider>
+            <ApplicationForm />
+      </PaperProvider>
+    
+    
     </View>
+     
+        
+
+
   );
 };
 
@@ -30,6 +42,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#f5f5f5',
+
   },
   title: {
     fontSize: 24,

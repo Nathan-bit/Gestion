@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, ActivityIndicator, Animated } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useNavigation } from '@react-navigation/native';
 
 const Stages = () => {
   const [stages, setStages] = useState([]);
@@ -15,6 +16,8 @@ const Stages = () => {
   });
   const [scaleAnim] = useState(new Animated.Value(0));
   const [searchError, setSearchError] = useState(false);
+
+  const navigation = useNavigation(); // Hook to get navigation
 
   useEffect(() => {
     fetchStages();
@@ -33,7 +36,7 @@ const Stages = () => {
     try {
       setLoading(true);
       const response = await fetch(`${process.env.BACKEND_URL}/etudiant/All?${new URLSearchParams({
-        search: search.trim(), // Trim search text before querying
+        search: search.trim(),
         page: pagination.currentPage.toString(),
         limit: '10',
         ...filters,
@@ -51,7 +54,6 @@ const Stages = () => {
         totalItems: data.pagination.totalItems,
       });
 
-      // Check if stages array is empty to show search error
       setSearchError(data.stages.length === 0);
     } catch (error) {
       console.error('Error fetching stages:', error);
@@ -63,25 +65,24 @@ const Stages = () => {
 
   const handleRefresh = () => {
     setRefreshing(true);
-    // Reset the current page to 1 and fetch data
     setPagination(prev => ({ ...prev, currentPage: 1 }));
-    fetchStages();  // Fetch the data again
+    fetchStages();
   };
 
   const renderStageItem = ({ item, index }) => (
     <Animated.View style={[styles.card, { transform: [{ scale: scaleAnim }] }]}>
       <View style={styles.cardBody}>
         <Text style={styles.jobCompany}>{item.Nom} - {item.Domaine}</Text>
-  
-        <View
-  style={{
-    borderBottomColor: 'black',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    marginBottom: 20, // Space below the hairline
-  }}
-/>
 
-       <Text style={styles.jobDetails}><Icon name="building" size={16} /> <Text style={styles.boldText}>Sociéte/Entreprise:</Text> {item.Nom} : {item.Address} </Text>
+        <View
+          style={{
+            borderBottomColor: 'black',
+            borderBottomWidth: StyleSheet.hairlineWidth,
+            marginBottom: 20,
+          }}
+        />
+
+        <Text style={styles.jobDetails}><Icon name="building" size={16} /> <Text style={styles.boldText}>Sociéte/Entreprise:</Text> {item.Nom} : {item.Address} </Text>
         <Text style={styles.jobDetails}><Icon name="briefcase" size={16} /> <Text style={styles.boldText}>Domaine :</Text> {item.Domaine}</Text>
         <Text style={styles.jobDetails}><Icon name="pencil" size={16} /> <Text style={styles.boldText}>Sujets:</Text> {item.Libelle} : {item.Titre} </Text>
         <Text style={styles.jobDetails}><Icon name="book" size={16} /> <Text style={styles.boldText}>Description:</Text> {item.Description}</Text>
@@ -92,13 +93,16 @@ const Stages = () => {
         <Text style={styles.jobDetails}><Icon name="phone" size={16} /> <Text style={styles.boldText}>Contact :</Text> {item.Telephone} / {item.Fax}</Text>
         <Text style={styles.jobDetails}><Icon name="envelope" size={16} /> <Text style={styles.boldText}>Mail :</Text> {item.Email} / {item.Email2}</Text>
         <Text style={styles.jobDetails}><Icon name="calendar" size={16} /> <Text style={styles.boldText}>Debut :</Text> {new Date(item.DateDebut).toLocaleDateString()} - <Text style={styles.boldText}>Fin :</Text> {new Date(item.DateFin).toLocaleDateString()}</Text>
-        <TouchableOpacity style={styles.postulateButton}>
+        
+        <TouchableOpacity 
+          style={styles.postulateButton}
+          onPress={() => navigation.navigate('Postulation', { stage: item })} // Navigate to Postulation screen with item data
+        >
           <Text style={styles.postulateButtonText}>Postuler Maintenant</Text>
         </TouchableOpacity>
       </View>
     </Animated.View>
   );
-  
 
   const renderHeader = () => (
     <View style={styles.header}>
@@ -207,10 +211,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: '#666',
     marginBottom: 10,
-    fontWeight:'bold',
-    textTransform:'uppercase',
-    textAlign:"center",
-    padding:30,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    textAlign: 'center',
+    padding: 30,
   },
   jobDetails: {
     fontSize: 16,
@@ -279,7 +283,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
-
   emptySearchContainer: {
     flex: 1,
     justifyContent: 'center',
