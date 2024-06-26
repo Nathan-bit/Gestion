@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -6,21 +7,19 @@ import Profiles from './HomeDrawers/Profiles';
 import Settings from './HomeDrawers/Settings';
 import About from './HomeDrawers/Abouts';
 import Logout from './HomeDrawers/Deconnexion';
-import Home from './HomeTabs/Home';  // Assume these components exist
+import Home from './HomeTabs/Home';
 import Stages from './HomeTabs/Stages';
 import StagesPostuler from './HomeTabs/StagesPostuler';
 import Resultats from './HomeTabs/Resultats';
 
-// Create the Drawer Navigator
 const Drawer = createDrawerNavigator();
-
-// Create the Tab Navigator
 const Tab = createBottomTabNavigator();
 
 const HomeTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        headerShown: false, // Hide the header for all tab screens
         tabBarIcon: ({ color, size }) => {
           let iconName;
           switch (route.name) {
@@ -67,9 +66,13 @@ const HomePage = () => {
   return (
     <Drawer.Navigator
       screenOptions={({ route }) => ({
+        headerShown: true, // Show the header for drawer screens
         drawerIcon: ({ color, size }) => {
           let iconName;
           switch (route.name) {
+            case 'HomeTabs':
+              iconName = 'home';
+              break;
             case 'Profiles':
               iconName = 'user';
               break;
@@ -94,7 +97,10 @@ const HomePage = () => {
       <Drawer.Screen
         name="HomeTabs"
         component={HomeTabs}
-        options={{ drawerLabel: 'Home' }}
+        options={{ 
+          drawerLabel: 'Home',
+          headerTitle: 'Home' // Set the header title for the HomeTabs screen
+        }}
       />
       <Drawer.Screen
         name="Profiles"
